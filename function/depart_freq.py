@@ -12,26 +12,25 @@ def depart_merge(image):
     kernel_sharpening = np.array([[-1.5, -1, -1.5], [-1, 11, -1], [-1.5, -1, -1.5]])
     adjusted_image2_shar = cv2.filter2D(adjusted_image2, -1, kernel_sharpening)
 
-        # 平滑滤波器
+
     kernel_smoothing = np.ones((2, 2)) / 4
 
-    # 去除锐化后的噪点
+
     adjusted_image2_shar = cv2.filter2D(adjusted_image2_shar, -1, kernel_smoothing)
-    # 应用高斯模糊
+
     #adjusted_image = cv2.GaussianBlur(adjusted_image, (5, 5), 0)
 
-    # 应用拉普拉斯滤波器
+
     adjusted_image2 = cv2.Laplacian(adjusted_image2_shar, cv2.CV_8U)
     adjusted_image2 = cv2.GaussianBlur(adjusted_image2_shar, (3, 3), 0)
 
 
 
-    # 增强原始图像的纹理
     adjusted_image = cv2.addWeighted(adjusted_image2, 1, adjusted_image1, 0, 0)
     
     #adjusted_image=cv2.bilateralFilter(adjusted_image, 40, 15, 22)
 
-    # 调整色彩饱和度
+
     saturation_factor = 1.03
     hsv_image = cv2.cvtColor(adjusted_image, cv2.COLOR_BGR2HSV)
     hsv_image[:, :, 1] = np.clip(hsv_image[:, :, 1] * saturation_factor, 0, 255)
