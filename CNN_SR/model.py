@@ -1,5 +1,6 @@
 """
 Author  : Zuo Chenjuan
+Time    : created by 2024.1.28
 
 """
 from torch import nn
@@ -60,7 +61,7 @@ class SRCNN(nn.Module):
         self.spacial_attention = Spacial_attention(kernel_size=7)
 
     def forward(self, x):
-        residual = x  # 保存输入作为残差
+        residual = x  
 
         x = self.relu(self.conv1(x))
         x = self.relu(self.conv2(x))
@@ -68,7 +69,7 @@ class SRCNN(nn.Module):
         x = self.relu(self.conv4(x))
         x = self.conv5(x)
 
-        # 添加残差连接
+
         #x = x + residual
 
         #x = self.channel_attention(x)
