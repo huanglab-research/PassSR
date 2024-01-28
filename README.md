@@ -9,7 +9,7 @@ This is the implementation of paper: Omni-frequency Diffusion-based Regional Fea
 	<tbody>
     <tr>
 		<tr>
-			<td width="40%" > <img src="images/3-1.png"> </td>
+			<td width="40%" > <img src="3-1.png"> </td>
 		</tr>
 	</tbody>
 </table>
