@@ -38,7 +38,7 @@ python function/get_fre.py
 ### Training/Resume Training
 
 ```python
-# Use sr.py and sample.py to train the super resolution task and unconditional generation task, respectively.
+# Use sr.py and sample.py to train the super resolution task.
 # Edit json files to adjust network structure and hyperparameters
 python sr.py -p train -c config/sr_sr3.json
 ```
