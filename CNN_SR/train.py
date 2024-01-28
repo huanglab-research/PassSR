@@ -17,7 +17,20 @@ from tqdm import tqdm
 from model import SRCNN
 from datasets import TrainDataset, EvalDataset
 from utils import AverageMeter, calc_psnr
+class CustomLoss(nn.Module):
+    def __init__(self, alpha):
+        super(CustomLoss, self).__init__()
+        self.alpha = alpha
 
+    def forward(self, input, target):
+        input_low, input_mid, input_high = compute_frequency_components(input)
+        target_low, target_mid, target_high = compute_frequency_components(target)
+        loss_low = torch.mean((input_low - target_low) ** 2)
+        loss_mid = torch.mean((input_mid - target_mid) ** 2)
+        loss_high = torch.mean((input_high - target_high) ** 2)
+        loss_mse = torch.mean((input - target) ** 2)
+        loss = (1-self.alpha)*(loss_low + loss_mid + loss_high) + self.alpha * loss_mse
+        return loss
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--train-file', type=str,default="/path/CNN_SR/outputs/Dr_output_train_2.h5")
@@ -44,7 +57,7 @@ if __name__ == '__main__':
 
     model = SRCNN().to(device)
    # model.load_state_dict(torch.load("/home/haida/data/zuochenjuan/SR3_plus/CNN_SR/outputs/x_DIV_deep2/epoch_118.pth"))
-    criterion = nn.MSELoss()
+    criterion = nn.CustomLoss(0.7)
     optimizer = optim.Adam([
         {'params': model.conv1.parameters()},
         {'params': model.conv2.parameters()},
