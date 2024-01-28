@@ -17,14 +17,14 @@ This is the implementation of paper: Omni-frequency Diffusion-based Regional Fea
 
 ## Datasets
 Experiments on **3 image datasets**:
-RealSR，DRealSR, DIV2K valid
+RealSR，DRealSR, DIV2K
 ### Datasets Download
 
 |#|Datasets|Download|
 |---|----|-----|
 |1|RealSR|[Link](https://drive.google.com/file/d/17ZMjo-zwFouxnm_aFM6CUHBwgRrLZqIM/view)|
 |2|DRealSR|[Link](https://drive.google.com/drive/folders/1tP5m4k1_shFT6Dcw31XV8cWHtblGmbOk)
-|3|DIV2K valid|[Link](https://data.vision.ee.ethz.ch/cvl/DIV2K/)  |
+|3|DIV2K|[Link](https://data.vision.ee.ethz.ch/cvl/DIV2K/)  |
 
  ### Environment
 ```python
