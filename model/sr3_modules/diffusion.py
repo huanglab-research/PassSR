@@ -257,7 +257,7 @@ class GaussianDiffusion(nn.Module):
             
             xh=img
 
-            x_sr_noisy = self.q_sample(#求加噪后的xsr
+            x_sr_noisy = self.q_sample(
                 x_start=xh, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1), noise=noise)
             
             img=x_sr_noisy
@@ -312,7 +312,7 @@ class GaussianDiffusion(nn.Module):
         #noise=none
         noise = default(noise, lambda: torch.randn_like(x_start))
 
-        x_noisy = self.q_sample(#求加噪后的x0
+        x_noisy = self.q_sample(
             x_start=x_start, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1), noise=noise)
 
         x_noisy_tmp=x_noisy
@@ -327,11 +327,11 @@ class GaussianDiffusion(nn.Module):
             low_xsr=torch.from_numpy(fre_xsr[0].astype(float))
             
             high_xsr=high_xsr / 255.0
-            high_xsr =high_xsr * 2 - 1#标准化归一化
+            high_xsr =high_xsr * 2 - 1
             mid_xsr=mid_xsr / 255.0
-            mid_xsr =mid_xsr * 2 - 1#标准化归一化
+            mid_xsr =mid_xsr * 2 - 1
             low_xsr=low_xsr / 255.0
-            low_xsr =low_xsr * 2 - 1#标准化归一化
+            low_xsr =low_xsr * 2 - 1
 
             depart_gray = torch.stack([low_xsr,mid_xsr,high_xsr], dim=0).unsqueeze(0)
 
@@ -343,7 +343,7 @@ class GaussianDiffusion(nn.Module):
 
         if not self.conditional:
             print("x_input.shape")
-            x_recon = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod)#UNet求噪声
+            x_recon = self.denoise_fn(x_noisy, continuous_sqrt_alpha_cumprod)
         else:
             x_in_depart=x_in_depart.float()
             x_in_depart=torch.cat((x_in_depart,x_in_depart),dim=1)
