@@ -1,7 +1,6 @@
 """
 Author  : Zuo Chenjuan
-Time    : created by 2024.1.28
-
+Time    : created by 2024-1-28
 """
 import h5py
 import numpy as np
