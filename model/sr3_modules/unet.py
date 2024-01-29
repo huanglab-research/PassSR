@@ -1,3 +1,7 @@
+"""
+Author  : Zuo Chenjuan
+Time    : created by 2024-1-28
+"""
 import math
 import torch
 from torch import nn
