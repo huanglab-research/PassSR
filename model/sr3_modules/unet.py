@@ -92,13 +92,9 @@ class FeatureWiseAffine(nn.Module):
         else:
             x = x + self.noise_func(noise_embed).view(batch, -1, 1, 1)
         return x
-
-
 class Swish(nn.Module):
     def forward(self, x):
         return x * torch.sigmoid(x)
-
-
 class Upsample(nn.Module):
     def __init__(self, dim):
         super().__init__()
@@ -116,8 +112,6 @@ class Downsample(nn.Module):
 
     def forward(self, x):
         return self.conv(x)
-
-
 # building block modules
 
 
@@ -133,8 +127,6 @@ class Block(nn.Module):
 
     def forward(self, x):
         return self.block(x)
-
-
 class ResnetBlock(nn.Module):
     def __init__(self, dim, dim_out, noise_level_emb_dim=None, dropout=0, use_affine_level=False, norm_groups=32):
         super().__init__()
@@ -145,15 +137,12 @@ class ResnetBlock(nn.Module):
         self.block2 = Block(dim_out, dim_out, groups=norm_groups, dropout=dropout)
         self.res_conv = nn.Conv2d(
             dim, dim_out, 1) if dim != dim_out else nn.Identity()
-
     def forward(self, x, time_emb):
         b, c, h, w = x.shape
         h = self.block1(x)
         h = self.noise_func(h, time_emb)
         h = self.block2(h)
         return h + self.res_conv(x)
- 
-
 class SelfAttention(nn.Module):
     def __init__(self, in_channel, n_head=1, norm_groups=32):
         super().__init__()
@@ -182,10 +171,7 @@ class SelfAttention(nn.Module):
 
         out = torch.einsum("bnhwyx, bncyx -> bnchw", attn, value).contiguous()
         out = self.out(out.view(batch, channel, height, width))
-
         return out + input
-
-
 class ResnetBlocWithAttn(nn.Module):
     def __init__(self, dim, dim_out, *, noise_level_emb_dim=None, norm_groups=32, dropout=0, with_attn=False):
         super().__init__()
@@ -201,18 +187,11 @@ class ResnetBlocWithAttn(nn.Module):
         x = self.res_block(x, time_emb)
         if(self.with_attn):
             x = self.attn(x)
-
-        
         if x.shape[2]==256 or x.shape[2]==128:
             x=self.channel_attention(x)
         else:
-            x=self.spacial_attention(x)        
-        
-
-        
+            x=self.spacial_attention(x)             
         return x
-
-
 class UNet(nn.Module):
     def __init__(
         self,
@@ -282,11 +261,8 @@ class UNet(nn.Module):
             if not is_last:
                 ups.append(Upsample(pre_channel))
                 now_res = now_res*2
-
         self.ups = nn.ModuleList(ups)
-
         self.final_conv = Block(pre_channel, default(out_channel, in_channel), groups=norm_groups)
-
     def extract_high_frequency(self, x):
         high_freq = x - F.interpolate(F.interpolate(x, scale_factor=0.5, mode='bilinear', align_corners=False), scale_factor=2, mode='bilinear', align_corners=False)
         high_mask = torch.sigmoid(high_freq)
@@ -328,12 +304,9 @@ class UNet(nn.Module):
                 x = layer(x, t)
             else:
                 x = layer(x)
-
         for layer in self.ups:
             if isinstance(layer, ResnetBlocWithAttn):
                 x = layer(torch.cat((x, feats.pop()), dim=1), t)
             else:
                 x = layer(x)
-
-
         return self.final_conv(x)
