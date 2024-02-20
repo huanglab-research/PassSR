@@ -336,14 +336,13 @@ class GaussianDiffusion(nn.Module):
             mid_xsr =mid_xsr * 2 - 1
             low_xsr=low_xsr / 255.0
             low_xsr =low_xsr * 2 - 1
-
+            
             depart_gray = torch.stack([low_xsr,mid_xsr,high_xsr], dim=0).unsqueeze(0)
 
             if i >= 1:
                 x_in_depart=torch.cat((x_in_depart,depart_gray),0)
             else:
                 x_in_depart=depart_gray
-        
 
         if not self.conditional:
             print("x_input.shape")
