@@ -8,10 +8,8 @@ from torch import nn
 import torch.nn.functional as F
 from inspect import isfunction
 
-
 def exists(x):
     return x is not None
-
 
 def default(val, d):
     if exists(val):
@@ -287,8 +285,7 @@ class UNet(nn.Module):
         k=0
         for layer in self.downs:
             if isinstance(layer, ResnetBlocWithAttn):
-                x = layer(x, t)
-                
+                x = layer(x, t)               
             else:
                 x = layer(x)
             if k==5:
