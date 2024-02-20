@@ -24,7 +24,7 @@ class DDPM(BaseModel):
             opt['model']['beta_schedule']['train'], schedule_phase='train')
         if self.opt['phase'] == 'train':
             self.netG.train()
-            # find the parameters to optimize 微调参数
+            # find the parameters to optimize 
             if opt['model']['finetune_norm']:
                 optim_params = []
                 for k, v in self.netG.named_parameters():
@@ -49,7 +49,7 @@ class DDPM(BaseModel):
 
     def optimize_parameters(self):
         self.optG.zero_grad()
-        l_pix = self.netG(self.data)#使ddpm的forward方法运行,返回损失值
+        l_pix = self.netG(self.data)
         # need to average in multi-gpu
         b, c, h, w = self.data['HR'].shape
         l_pix = l_pix.sum()/int(b*c*h*w)
@@ -63,7 +63,7 @@ class DDPM(BaseModel):
         self.netG.eval()
         with torch.no_grad():
             if isinstance(self.netG, nn.DataParallel):
-                self.SR = self.netG.module.super_resolution(#调用super
+                self.SR = self.netG.module.super_resolution(
                     torch.cat((self.data['FRE'],self.data['SR']),1), continous)
             else:
                 self.SR = self.netG.super_resolution(
