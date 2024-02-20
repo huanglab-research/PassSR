@@ -270,17 +270,14 @@ class UNet(nn.Module):
         high_mask = torch.sigmoid(high_freq)
         return high_freq, high_mask
     def forward(self, x, time):
-
         x_fre=x[:, :3, :, :]
         x=x[:, 3:9, :, :]
         
         high_freq, high_mask = self.extract_high_frequency(x[:, :3, :, :])
         high_mask = torch.cat([high_mask, high_mask], dim=1)
-        x = x * high_mask  # 应用高频掩码
-
+        x = x * high_mask  
         t = self.noise_level_mlp(time) if exists(
             self.noise_level_mlp) else None
-
         feats = []
         k=0
         for layer in self.downs:
