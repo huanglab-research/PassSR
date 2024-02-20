@@ -178,7 +178,7 @@ class GaussianDiffusion(nn.Module):
                 img = torch.randn(shape, device=device)
                 noise=None
                 noise = default(noise, lambda: torch.randn_like(img))
-                x_0_noisy = self.q_sample(#求加噪后的xsr
+                x_0_noisy = self.q_sample(
                     x_start=xh, continuous_sqrt_alpha_cumprod=continuous_sqrt_alpha_cumprod.view(-1, 1, 1, 1), noise=noise)
                 xh_tmp=(xh+1)/2.0*255.0
 
@@ -196,7 +196,7 @@ class GaussianDiffusion(nn.Module):
             x_input=torch.cat((condition_x,x),1)
 
             x_recon = self.predict_start_from_noise(
-                x, t=t, noise=self.denoise_fn(x_input, noise_level))#UNet预测噪音4,12,256,256
+                x, t=t, noise=self.denoise_fn(x_input, noise_level))
 
         else:
             x_recon = self.predict_start_from_noise(
@@ -211,7 +211,7 @@ class GaussianDiffusion(nn.Module):
 
     @torch.no_grad()
     def p_sample(self, x, t, clip_denoised=True, condition_x=None,xh=None):
-        model_mean, model_log_variance = self.p_mean_variance(#得到噪音
+        model_mean, model_log_variance = self.p_mean_variance(
             x=x, t=t, clip_denoised=clip_denoised, condition_x=condition_x,xh=xh)
         noise = torch.randn_like(x) if t > 0 else torch.zeros_like(x)
         return model_mean + noise * (0.5 * model_log_variance).exp()
@@ -266,7 +266,7 @@ class GaussianDiffusion(nn.Module):
             
             img=x_sr_noisy
             for i in tqdm(reversed(range(0, 2000)), desc='sampling loop time step', total=2000):
-                img = self.p_sample(img, i, condition_x=x,xh=xh)#求xt-1
+                img = self.p_sample(img, i, condition_x=x,xh=xh)
                 if i % sample_inter == 0:
                     ret_img = torch.cat([ret_img, img], dim=0)    
             
