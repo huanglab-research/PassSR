@@ -1,10 +1,4 @@
-# Omni-frequency Diffusion-based Regional Feature Consistency Recovery for Blind Image Super-Resolution(DiffRCR)
 
-## Brief
-
-This is the implementation of paper: Omni-frequency Diffusion-based Regional Feature Consistency Recovery for Blind Image Super-Resolution
-
-## The Framework of the Proposed DiffRCR
 <table border=0 >
 	<tbody>
     <tr>
